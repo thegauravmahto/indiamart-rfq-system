@@ -72,9 +72,9 @@ body {
   transform: translateY(-2px);
 }
 
-/* Chat bubble animations */
+/* Chat bubble animations -- applied via inline style only on newest message */
 .chat-bubble {
-  animation: fadeInUp 0.4s ease-out;
+  /* no global animation; prevents re-trigger glitch on re-render */
 }
 
 @keyframes fadeInUp {
