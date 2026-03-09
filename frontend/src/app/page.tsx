@@ -397,6 +397,7 @@ export default function HomePage() {
           {demoTab === 'live' ? (
             <LiveDemo />
           ) : (
+
           /* Two-column layout (Guided Demo) */
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
             {/* LEFT -- Chat Window (col-span-3) */}
@@ -418,10 +419,15 @@ export default function HomePage() {
 
                 {/* Chat messages */}
                 <div className="max-h-[500px] space-y-3 overflow-y-auto p-4">
-                  {DEMO_CONVERSATION.slice(0, currentStep + 1).map((msg: ChatMessage) => {
+                  {DEMO_CONVERSATION.slice(0, currentStep + 1).map((msg: ChatMessage, idx: number) => {
+                    const isLatest = idx === currentStep
+                    const animStyle = isLatest ? { animation: 'fadeInUp 0.4s ease-out' } : undefined
+                    // Use composite key so React remounts only the newest bubble (re-triggers animation)
+                    const key = isLatest ? `${msg.id}-step${currentStep}` : msg.id
+
                     if (msg.role === 'buyer') {
                       return (
-                        <div key={msg.id} className="chat-bubble ml-auto max-w-[80%]">
+                        <div key={key} className="chat-bubble ml-auto max-w-[80%]" style={animStyle}>
                           <div className="rounded-2xl rounded-br-sm bg-im-bg-highlight p-3 text-sm text-im-text-heading">
                             {msg.text}
                           </div>
@@ -430,7 +436,7 @@ export default function HomePage() {
                     }
                     if (msg.role === 'ai') {
                       return (
-                        <div key={msg.id} className="chat-bubble mr-auto max-w-[85%]">
+                        <div key={key} className="chat-bubble mr-auto max-w-[85%]" style={animStyle}>
                           {msg.tag && (
                             <span className="mb-1 inline-block rounded bg-im-bg-highlight px-2 py-0.5 text-[10px] font-semibold text-im-blue">
                               {msg.tag}
@@ -444,7 +450,7 @@ export default function HomePage() {
                     }
                     // system
                     return (
-                      <div key={msg.id} className="chat-bubble mx-auto max-w-[90%]">
+                      <div key={key} className="chat-bubble mx-auto max-w-[90%]" style={animStyle}>
                         {msg.tag && (
                           <p className="mb-1 text-center text-[10px] font-semibold uppercase tracking-wider text-im-blue">
                             {msg.tag}
@@ -594,7 +600,7 @@ export default function HomePage() {
                             <div className="mt-2">
                               <div className="mb-1 flex items-center justify-between text-[10px]">
                                 <span className="text-im-text-muted">Relevance</span>
-                                <span className="font-medium text-im-teal-dark">
+                                <span className="font-semibold text-im-teal-dark">
                                   {supplier.relevanceScore}%
                                 </span>
                               </div>
