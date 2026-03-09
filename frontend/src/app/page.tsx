@@ -39,6 +39,7 @@ import {
   type ChatMessage,
 } from '@/lib/demoData'
 import { useScrollReveal, useCounter } from '@/hooks/useScrollReveal'
+import LiveDemo from '@/components/LiveDemo'
 
 // ---------------------------------------------------------------------------
 // Icon mapper helpers
@@ -69,6 +70,9 @@ function scrollTo(id: string) {
 export default function HomePage() {
   // ---- Mobile menu state ----
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  // ---- Demo tab state ----
+  const [demoTab, setDemoTab] = useState<'guided' | 'live'>('guided')
 
   // ---- Demo state ----
   const [currentStep, setCurrentStep] = useState(0)
@@ -354,7 +358,7 @@ export default function HomePage() {
       <section id="demo" className="py-16 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           {/* Section heading */}
-          <div className="mb-12 text-center">
+          <div className="mb-8 text-center">
             <h2 className="text-3xl font-bold text-im-text-heading md:text-4xl">
               See It In Action
             </h2>
@@ -363,7 +367,37 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Two-column layout */}
+          {/* Tab Switcher */}
+          <div className="mx-auto mb-10 flex max-w-md items-center rounded-xl bg-gray-100 p-1">
+            <button
+              onClick={() => setDemoTab('guided')}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
+                demoTab === 'guided'
+                  ? 'bg-white text-im-blue shadow-sm'
+                  : 'text-im-text-muted hover:text-im-text-heading'
+              }`}
+            >
+              <Play className="h-4 w-4" />
+              Guided Demo
+            </button>
+            <button
+              onClick={() => setDemoTab('live')}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
+                demoTab === 'live'
+                  ? 'bg-white text-im-teal-dark shadow-sm'
+                  : 'text-im-text-muted hover:text-im-text-heading'
+              }`}
+            >
+              <Sparkles className="h-4 w-4" />
+              Try It Live
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          {demoTab === 'live' ? (
+            <LiveDemo />
+          ) : (
+          /* Two-column layout (Guided Demo) */
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
             {/* LEFT -- Chat Window (col-span-3) */}
             <div className="lg:col-span-3">
@@ -560,7 +594,7 @@ export default function HomePage() {
                             <div className="mt-2">
                               <div className="mb-1 flex items-center justify-between text-[10px]">
                                 <span className="text-im-text-muted">Relevance</span>
-                                <span className="font-semibold text-im-teal-dark">
+                                <span className="font-medium text-im-teal-dark">
                                   {supplier.relevanceScore}%
                                 </span>
                               </div>
@@ -588,6 +622,7 @@ export default function HomePage() {
               )}
             </div>
           </div>
+          )}
         </div>
       </section>
 
