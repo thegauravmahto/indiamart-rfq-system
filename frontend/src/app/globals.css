@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  --im-blue: #2E3192;
+  --im-teal: #00A699;
+  --im-teal-dark: #007A6E;
+  --im-indigo: #4F5EFF;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Roboto', Arial, 'Helvetica Neue', sans-serif;
+  background-color: #F3F3F3;
+  color: #323232;
+}
+
+/* Custom scrollbar matching IndiaMART aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F3F3F3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CCCCCC;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2E3192;
+}
+
+/* Typing cursor animation */
+.typing-cursor::after {
+  content: '|';
+  animation: blink 0.8s infinite;
+  color: #2E3192;
+  font-weight: 700;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Gradient text for headings */
+.gradient-text {
+  background: linear-gradient(135deg, #2E3192 0%, #00A699 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* IndiaMART card hover effect */
+.im-card {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.im-card:hover {
+  border-color: #D3D8FD;
+  box-shadow: 0 4px 20px rgba(46, 49, 146, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Chat bubble animations */
+.chat-bubble {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Progress bar fill */
+.progress-fill {
+  transition: width 1s ease-in-out;
+}
+
+/* Glow effect for active agent */
+.agent-glow {
+  box-shadow: 0 0 20px rgba(46, 49, 146, 0.3), 0 0 40px rgba(0, 166, 153, 0.15);
+}
+
+/* Section scroll reveal base */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Floating chat button pulse */
+.float-pulse {
+  animation: floatPulse 3s infinite;
+}
+
+@keyframes floatPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(79, 94, 255, 0.3); }
+  50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(79, 94, 255, 0.5); }
+}
+
+/* Pipeline connector line */
+.pipeline-line {
+  background: linear-gradient(90deg, #2E3192, #00A699);
+  height: 3px;
+  transition: width 1s ease-in-out;
+}
+
+/* Number counter animation */
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.count-animate {
+  animation: countUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
