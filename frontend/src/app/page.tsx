@@ -79,7 +79,7 @@ export default function HomePage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [showRFQ, setShowRFQ] = useState(false)
   const [showSuppliers, setShowSuppliers] = useState(false)
-  const chatEndRef = useRef<HTMLDivElement>(null)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // ---- Scroll reveal hooks ----
@@ -101,9 +101,12 @@ export default function HomePage() {
     return () => clearInterval(timer)
   }, [])
 
-  // ---- Auto-scroll chat ----
+  // ---- Auto-scroll chat (container-scoped, not page-level) ----
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const container = chatContainerRef.current
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
+    }
   }, [currentStep])
 
   // ---- RFQ / Suppliers reveal logic ----
@@ -419,7 +422,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Chat messages */}
-                <div className="max-h-[500px] space-y-3 overflow-y-auto p-4">
+                <div ref={chatContainerRef} className="max-h-[500px] space-y-3 overflow-y-auto p-4">
                   {DEMO_CONVERSATION.slice(0, currentStep + 1).map((msg: ChatMessage, idx: number) => {
                     const isLatest = idx === currentStep
                     const animStyle = isLatest ? { animation: 'fadeInUp 0.4s ease-out' } : undefined
@@ -463,7 +466,6 @@ export default function HomePage() {
                       </div>
                     )
                   })}
-                  <div ref={chatEndRef} />
                 </div>
 
                 {/* Controls bar */}
