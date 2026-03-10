@@ -1,23 +1,97 @@
-# IndiaMART AI-Powered RFQ System - Prototype
+# IndiaMART AI-Powered RFQ System
 
-## Overview
+Multi-agent AI system that converts vague buyer queries into structured RFQs and matches relevant suppliers from the IndiaMART catalog. Includes a **production-ready frontend demo** and a **Python backend prototype**, both powered by Google Gemini.
 
-Multi-agent AI system that converts vague buyer queries into structured RFQs
-and matches relevant suppliers from the IndiaMART catalog. Built with Google ADK
-(Agent Development Kit) and Gemini 2.0 Flash.
+---
 
-### The Problem
-70%+ of buyer queries on IndiaMART are vague (e.g., "need packaging machine").
-This leads to poor supplier matching, irrelevant RFQs, and low conversion rates.
+## The Problem
 
-### The Solution
+70%+ of buyer queries on IndiaMART are vague (e.g., "need packaging machine"). This leads to poor supplier matching, irrelevant RFQs, and low conversion rates.
+
+## The Solution
+
 An AI-powered pipeline that:
+
 1. **Understands intent** -- even from Hindi/Hinglish queries
 2. **Asks smart follow-ups** -- category-aware, prioritized questions
 3. **Builds structured RFQs** -- complete with specs, budget, delivery details
 4. **Matches suppliers** -- scored and ranked by relevance, trust, and location
 
-## Architecture
+---
+
+## Live Demo (Frontend)
+
+The interactive frontend is a single-page Next.js application showcasing the full RFQ pipeline.
+
+### Features
+
+- **Guided Demo** -- Step-through a pre-built buyer conversation showing intent classification, RFQ generation, and supplier matching
+- **Live AI Demo** -- Bring your own Gemini API key and have a real-time conversation with the AI RFQ builder (key never leaves the browser)
+- **Structured RFQ Output** -- Auto-generated RFQ cards with extracted fields (product, specs, quantity, budget, delivery)
+- **Supplier Matching** -- Scored supplier recommendations with ratings, location, and match confidence
+- **Architecture Visualization** -- Interactive diagram of the multi-agent pipeline
+- **Impact Metrics** -- Animated counters showing processing time, accuracy, and conversion improvements
+- **Fully Responsive** -- Mobile-first design with IndiaMART brand theming
+
+### Frontend Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| **Next.js 14** | React framework with App Router |
+| **TypeScript** | Type safety across all components |
+| **Tailwind CSS 3** | Utility-first styling with custom IndiaMART color palette |
+| **Framer Motion** | Scroll-reveal and section animations |
+| **Lucide React** | Icon library |
+| **@google/genai** | Client-side Gemini API for the Live Demo |
+
+### Frontend Structure
+
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx          # Main landing page (hero, guided demo, architecture, metrics)
+│   │   ├── layout.tsx        # Root layout with Inter font + metadata
+│   │   └── globals.css       # Tailwind base + custom animations
+│   ├── components/
+│   │   └── LiveDemo.tsx      # Live AI chat component (API key input, multi-turn chat, RFQ parsing)
+│   ├── hooks/
+│   │   └── useScrollReveal.ts # Intersection Observer hooks for scroll animations
+│   └── lib/
+│       ├── demoData.ts       # Static demo conversation, RFQ, suppliers, metrics
+│       └── geminiRFQ.ts      # Gemini SDK wrapper (chat session, RFQ extraction, supplier parsing)
+├── package.json
+├── tailwind.config.ts        # Custom IndiaMART color tokens
+├── tsconfig.json
+└── next.config.js
+```
+
+### Running the Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). No API key needed for the Guided Demo. For the Live Demo, enter a [Gemini API key](https://aistudio.google.com/apikey) when prompted.
+
+### Deploying to Vercel
+
+1. Push to GitHub
+2. Import the repo on [vercel.com](https://vercel.com)
+3. Set **Root Directory** to `frontend`
+4. Deploy -- Vercel auto-detects Next.js
+
+Every push to `main` triggers an automatic redeployment.
+
+---
+
+## Backend Prototype
+
+The Python backend implements the full multi-agent pipeline using Google ADK.
+
+### Architecture
 
 ```
 Buyer Query --> [Intent Classifier] --> [RFQ Builder] --> [Supplier Matcher]
@@ -35,59 +109,40 @@ Buyer Query --> [Intent Classifier] --> [RFQ Builder] --> [Supplier Matcher]
 | **Supplier Matcher** | Semantic matching against supplier catalog | `search_suppliers` | Ranked supplier list |
 | **Orchestrator** | Google ADK SequentialAgent coordinating the pipeline | -- | End-to-end flow |
 
-## Tech Stack
+### Backend Tech Stack
 
 - **Google ADK** (Agent Development Kit) -- Multi-agent orchestration
 - **Gemini 2.0 Flash** -- LLM for all agents
 - **Pydantic v2** -- Data validation and serialization
 - **Python 3.11+** -- Runtime
 
-## Project Structure
+### Backend Structure
 
 ```
 indiamart_rfq_prototype/
-|-- README.md              # This file
-|-- requirements.txt       # Python dependencies
-|-- config.py              # Configuration constants
-|-- models.py              # Pydantic data models (enums, schemas)
-|-- mock_data.py           # Mock supplier DB + category taxonomy + question templates
-|-- tools.py               # Function-calling tools for agents
-|-- agents.py              # All 3 agents + orchestrator (Google ADK)
-|-- main.py                # Interactive CLI demo
+├── config.py              # Configuration constants
+├── models.py              # Pydantic data models (enums, schemas)
+├── mock_data.py           # Mock supplier DB + category taxonomy + question templates
+├── tools.py               # Function-calling tools for agents
+├── agents.py              # All 3 agents + orchestrator (Google ADK)
+├── main.py                # Interactive CLI demo
+└── requirements.txt       # Python dependencies
 ```
 
-## Setup
-
-### Prerequisites
-- Python 3.11 or higher
-- A Google AI API key (Gemini access)
-
-### Installation
+### Running the Backend
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/thegauravmahto/indiamart-rfq-system.git
-cd indiamart-rfq-system
-
-# 2. Create virtual environment (recommended)
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 
-# 3. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# 4. Set your Gemini API key
+# Set your Gemini API key
 export GOOGLE_API_KEY="your_gemini_api_key_here"
 
-# 5. Run the demo
-python main.py
-```
-
-## Usage
-
-### Interactive CLI Demo
-
-```bash
+# Run the interactive CLI
 python main.py
 ```
 
@@ -101,60 +156,30 @@ python main.py
 
 You: Need packaging machine for chips packets
 
-Assistant: I can see you are looking for a Packaging Machine under
-Industrial Machinery. Let me ask a few questions to find the best match:
+AI: I can help you find the right packaging machine. Let me ask a few questions:
+    1. What's your production volume (packets/hour)?
+    2. What packet sizes do you need?
+    3. Do you need nitrogen flushing?
 
-1. What type of packaging machine do you need?
-   - Form Fill Seal (FFS)
-   - Flow Wrap
-   - Shrink Wrap
-   - Vacuum Packaging
-
-2. What is your required throughput (packs/min)?
-3. Do you need Fully Automatic or Semi-Automatic?
-4. What is your approximate budget range?
-
-You: FFS machine, fully automatic, 40-60 packs per min, budget around 15 lakh
-
-Assistant: Here is your structured RFQ and matched suppliers:
-
---- RFQ Summary ---
-Title: Fully Automatic FFS Packaging Machine
-Category: Industrial Machinery > Packaging Machinery > Form Fill Seal (FFS)
-Specs: Throughput 40-60 packs/min, Fully Automatic
-Budget: 10-15 Lakh INR
-Completeness: 92%
-
---- Top Supplier Matches ---
-1. PackTech Solutions (Noida) - Score: 94/100 - TrustSEAL
-2. AutoPack Industries (Pune) - Score: 88/100 - TrustSEAL
-3. ...
+[Intent: L1=Industrial Machinery, L2=Packaging, L3=Food Packaging Machines]
+[Confidence: 0.94]
 ```
 
-## Design Decisions
+---
 
-### Why Google ADK?
-- Native SequentialAgent for multi-step pipelines
-- Built-in session state management (agents share context)
-- Function-calling tools with automatic schema generation
-- Production-ready with Google Cloud integration path
+## Key Design Decisions
 
-### Why Gemini 2.0 Flash?
-- Low latency for conversational interactions
-- Strong multilingual support (Hindi, Hinglish)
-- Cost-effective for high-volume B2B queries
-- Native function calling support
+- **Client-side Gemini calls** -- The Live Demo runs Gemini directly in the browser via `@google/genai`. No backend needed, no API key stored server-side.
+- **Guided + Live dual demo** -- The guided walkthrough works without any API key (static data), while the live demo proves real AI capability.
+- **IndiaMART brand theming** -- Custom Tailwind color tokens (`im-blue`, `im-teal`, etc.) match the actual IndiaMART design language.
+- **Multi-agent architecture** -- Each agent (classifier, builder, matcher) is independently testable and swappable.
 
-### Mock Data vs Production
-This prototype uses:
-- **Keyword matching** for category classification (production: embeddings + vector search)
-- **In-memory mock DB** for suppliers (production: ElasticSearch / AlloyDB)
-- **Rule-based scoring** for supplier ranking (production: ML ranking model)
+---
 
-## Extending the Prototype
+## License
 
-1. **Add real embeddings**: Replace keyword matching with `text-embedding-004`
-2. **Connect to IndiaMART APIs**: Swap mock data for real supplier/category APIs
-3. **Add conversation memory**: Use ADK session state for multi-turn context
-4. **Deploy as API**: Wrap in FastAPI for integration with IndiaMART frontend
-5. **Add evaluation**: Build test suite with real buyer queries + expected outputs
+MIT
+
+---
+
+Built by [Gaurav Mahto](https://github.com/thegauravmahto)
