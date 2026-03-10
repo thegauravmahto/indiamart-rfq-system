@@ -176,15 +176,12 @@ export default function LiveDemo() {
   const [rfqResult, setRfqResult] = useState<LiveRFQResult | null>(null)
 
   // -- Refs --
-  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const chatEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Auto-scroll to bottom on new messages (container-scoped, not page-level)
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
-    const container = chatContainerRef.current
-    if (container) {
-      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
-    }
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isLoading])
 
   // Focus input after validation
@@ -454,7 +451,7 @@ export default function LiveDemo() {
           </div>
 
           {/* Chat messages */}
-          <div ref={chatContainerRef} className="max-h-[500px] min-h-[350px] space-y-3 overflow-y-auto p-4">
+          <div className="max-h-[500px] min-h-[350px] space-y-3 overflow-y-auto p-4">
             {messages.map((msg) => {
               if (msg.role === 'user') {
                 return (
@@ -489,6 +486,7 @@ export default function LiveDemo() {
             })}
 
             {isLoading && <TypingIndicator />}
+            <div ref={chatEndRef} />
           </div>
 
           {/* Input area */}
