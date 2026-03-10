@@ -79,7 +79,7 @@ export default function HomePage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [showRFQ, setShowRFQ] = useState(false)
   const [showSuppliers, setShowSuppliers] = useState(false)
-  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const chatEndRef = useRef<HTMLDivElement>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // ---- Scroll reveal hooks ----
@@ -101,12 +101,9 @@ export default function HomePage() {
     return () => clearInterval(timer)
   }, [])
 
-  // ---- Auto-scroll chat (container-scoped, not page-level) ----
+  // ---- Auto-scroll chat ----
   useEffect(() => {
-    const container = chatContainerRef.current
-    if (container) {
-      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
-    }
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [currentStep])
 
   // ---- RFQ / Suppliers reveal logic ----
@@ -263,6 +260,7 @@ export default function HomePage() {
           </nav>
         </div>
       </header>
+
 
       {/* ================================================================
           SECTION 2 : HERO
@@ -421,7 +419,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Chat messages */}
-                <div ref={chatContainerRef} className="max-h-[500px] space-y-3 overflow-y-auto p-4">
+                <div className="max-h-[500px] space-y-3 overflow-y-auto p-4">
                   {DEMO_CONVERSATION.slice(0, currentStep + 1).map((msg: ChatMessage, idx: number) => {
                     const isLatest = idx === currentStep
                     const animStyle = isLatest ? { animation: 'fadeInUp 0.4s ease-out' } : undefined
@@ -465,6 +463,7 @@ export default function HomePage() {
                       </div>
                     )
                   })}
+                  <div ref={chatEndRef} />
                 </div>
 
                 {/* Controls bar */}
@@ -507,6 +506,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+
 
             {/* RIGHT -- Output Panel (col-span-2) */}
             <div className="lg:col-span-2">
@@ -745,6 +745,7 @@ export default function HomePage() {
         </div>
       </section>
 
+
       {/* ================================================================
           SECTION 5 : ARCHITECTURE
           ================================================================ */}
@@ -856,6 +857,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
 
       {/* ================================================================
           SECTION 6 : METRICS
